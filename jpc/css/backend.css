@@ -31,3 +31,10 @@ table.jpc-table {
 table.jpc-table tr td a {
     float: right;
 }
+.shortcodes {
+    background: #fff;
+    padding: 5px;
+    border-left: 4px solid #0085BA;
+    margin: 10px 0px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}

@@ -599,11 +599,20 @@ function theme_settings_page() {
 		echo '<form method="post" action="options.php">';
 			settings_fields( 'option-group' );
 			do_settings_sections( 'option-group' );
+			echo '<div class="shortcodes">';
+					echo "<h2>Social Media Shortcode</h2>";
+						echo "<p><b>Shortcode :</b> ".stripslashes('[social-media]')." </p>";
+						echo "<p><b>Parameters : </b>".stripslashes('mode = facebook , twitter , google_plus , linkedin , youtube , instagram , pinterest')." </p>";
+						echo "<p><b>Example : </b>".stripslashes('[social-media mode="facebook"]')." </p>";
+					echo "<h2>Copyright and Developer Shortcode</h2>";
+					echo "<p><b>Get Developer Part : </b> ".stripslashes('[developer]')."</p>";
+					echo "<p><b>Get Copyright Part : </b> ".stripslashes('[copyright]')."</p>";
+			echo '</div>';
 			echo '<h3>I. Social Media</h3>';
 			echo '<table class="jpc-table">';
 				echo '<tr>';
 					echo '<td>Facebook: </td>';
-					echo '<td><input placeholder="Facebook" type="text" name="facebook" value="'. esc_attr( get_option('facebook') ).'" /></td>';
+					echo '<td><input placeholder="Facebook" type="text" name="facebook" value="'. esc_attr( get_option('facebook') ).'" /> </td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td>Twitter: </td>';
@@ -705,30 +714,54 @@ function register_theme_settings() {
 	register_setting( 'option-group', 'developer' );
 	
 }
+function developer_shortcode( $atts ) { 
+	return do_shortcode(get_option('developer'));
+}
+add_shortcode( 'developer', 'developer_shortcode' ); //[developer]
+
+
+function copyright_shortcode( $atts ) { 
+	return do_shortcode(get_option('copyright'));
+}
+add_shortcode( 'copyright', 'copyright_shortcode' ); //[copyright]
+
 
 function social_media_shortcode( $atts ) {
-    extract(shortcode_atts(array(
-        'mode' => 'type'
-    ),$atts ));
 
-    switch( $type ){
-        case 'facebook': 
-            $output = get_option('facebook');
-            break;
-
-        case 'twitter': 
-            $output = esc_attr( get_option('twitter') );
-            break;
-
-        default:
-            $output = '<div class="defaultshortcodecontent"></div>';
-            break;
-    }
- 
-    return $type;
+    // Assign default values
+	
+    $mode   = "";
+	$return = "Invalid value!";
+	
+    extract( shortcode_atts( array(
+        'mode' =>  $mode
+    ), $atts ) );
+	
+	if($mode == "facebook"){
+		$return = get_option('facebook');
+	}
+	else if($mode == "twitter"){
+		$return = get_option('twitter');
+	}
+	else if($mode == "google_plus"){
+		$return = get_option('google_plus');
+	}
+	else if($mode == "linkedin"){
+		$return = get_option('linkedin');
+	}
+	else if($mode == "youtube"){
+		$return = get_option('youtube');
+	}
+	else if($mode == "instagram"){
+		$return = get_option('instagram');
+	}
+	else if($mode == "pinterest"){
+		$return = get_option('pinterest');
+	}
+	
+    return $return;
 }
 add_shortcode( 'social-media', 'social_media_shortcode' ); //[social-media mode="facebook"]
-
 /**
 *
 * Add Theme Action
